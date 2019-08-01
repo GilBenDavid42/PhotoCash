@@ -19,7 +19,7 @@ def get_frame():
     camera = cv2.VideoCapture(camera_port)
 
     while True:
-        im = camera.read()
+        retval, im = camera.read()
         imgencode = cv2.imencode('.jpg',im)[1]
         stringData = imgencode.tostring()
         yield (b'--frame\r\n'b'Content-Type: text/plain\r\n\r\n' + stringData + b'\r\n')
@@ -27,7 +27,7 @@ def get_frame():
 
 
 @app.route('/frame')
-def calc():
+def frame():
     return Response(get_frame(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
